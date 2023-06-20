@@ -3,12 +3,28 @@
 
 #define REP 100000000.0
 
+
+long fibonacci (long start, long end){
+    long i;
+    for(i = start; i <= end;i++){
+        antp = 0;
+        pen = 1;
+        for(j=1;j<SIZE;j++){
+            aux = pen;
+            pen += antp;
+            antp = aux;
+        }
+    }
+    return i;
+}
+
 int main(int argc, char **argv)
 {
 
-    long double sum = 0, accum = 0;
+    /*long double sum = 0, accum = 0;*/
     int size, rank;
     long start, end;
+    long double antp , pen = 1 , aux;
 
     MPI_Status status;
     MPI_Init(&argc, &argv);
@@ -22,16 +38,6 @@ int main(int argc, char **argv)
         sum = sum + i;
     }
     */
-    
-    for(long i = start; i <= end;i++){
-        antp = 0;
-        pen = 1;
-        for(j=1;j<SIZE;j++){
-            aux = pen;
-            pen += antp;
-            antp = aux;
-        }
-    }
 
     // slaves
     if (rank != 0)
