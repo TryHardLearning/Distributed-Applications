@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#define SIZE 300
+#define SIZE 1000
 
-#define REP 1
+#define REP 2
 
-int main (void){
+int main (){
     long i,j;
     long double antp , pen = 1 , aux;
 
@@ -15,7 +16,8 @@ int main (void){
             aux = pen;
             pen += antp;
             antp = aux;
+            printf("%llf\n",pen);
         }
     }
-
+    return 0;
 }
