@@ -1,4 +1,0 @@
-mpicc olaMundo2.c -o olaMundo2
-mpirun -np 16 --oversubscribe olaMundo2
-                -HyperThread
-Mpi Trabalho com processos em vez de Threads como no OpemMP

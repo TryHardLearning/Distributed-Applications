@@ -1,0 +1,8 @@
+mpicc Exe.c -o Exe
+
+                    |-> Enable hyperThread
+mpirun -np 16 --oversubscribe Exe
+            |->HyperThread
+
+
+Mpi Trabalho com processos em vez de Threads como no OpemMP
