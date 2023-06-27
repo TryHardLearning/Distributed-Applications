@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
     // slaves
     if (rank != 0){
-        prinf("Core %d | Inicio: %ld | Fim: %ld\n",&rank,start,end)
+        prinf("Core %d | Inicio: %ld | Fim: %ld\n",&rank,start,end);
         long int fib = fibonacci(start,end)
         //Variavel Enviada - tamanho - tipo - processo de destino - tag - comunicardor
         MPI_Send(&fib, 1, MPI_LONG, 0, 1, MPI_COMM_WORLD);
