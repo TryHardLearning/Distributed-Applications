@@ -1,60 +1,61 @@
 #include <stdio.h>
 #include <mpi.h>
 
-#define REP 100000000
-#define SIZE 1000
+#define SIZE 1200
 
-long int fibonacci (long start, long end){
-    long int i;        
-    long double antp, pen , aux;
-    for(i = start; i <= end;i++){
+long int fibonacci(long start, long end) {
+    long int count = 0;
+    long double antp, pen, aux;
+    for (long int i = start; i <= end; i++) {
         antp = 0;
         pen = 1;
-        for(j=1;j<SIZE;j++){
+        for (long j = 1; j < SIZE; j++) {
             aux = pen;
             pen += antp;
             antp = aux;
         }
+        count++;
     }
-    return (i - start);
+    return count;
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
-    /*long double sum = 0, accum = 0;*/
     int size, rank;
     long int start, end;
-    long int index=0, allIndex=0;   
+    long int index = 0, allIndex = 0;
+    long int VarFib = 0, allFib = 0;
 
     MPI_Status status;
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    start = REP * rank / size + 1;
-    end = REP * (rank + 1) / size;
-   
+    long REP = 15000000;
 
-    // slaves
-    if (rank != 0){
-        prinf("Core %d | Inicio: %ld | Fim: %ld\n",&rank,start,end);
-        long int fib = fibonacci(start,end)
-        //Variavel Enviada - tamanho - tipo - processo de destino - tag - comunicardor
-        MPI_Send(&fib, 1, MPI_LONG, 0, 1, MPI_COMM_WORLD);
-    }
-    // master
-    else{
-        for (long j = 1; j < size; j++){
-            //Variavel recebida - tamanho - tipo - processo de origem - tag - comunicardor - status-de-erro
-            MPI_Recv(&index, 1, MPI_LONG_DOUBLE, j, 1, MPI_COMM_WORLD, &status);
-            allIndex += index;
-        }
+    long nuc = REP / size;
+    long resto = REP % size;
+
+    start = rank * nuc + 1;
+    end = start + nuc - 1;
+
+    
+    if (rank < resto) {
+        start += rank;
+        end += rank + 1;
+    } else {
+        start += resto;
+        end += resto;
     }
 
+    VarFib = fibonacci(start, end);
+
+    
+    MPI_Reduce(&VarFib, &allFib, 1, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+
     // master
-    if (rank == 0){
-        printf("Repetiçoes Desejadas %ld | Feitas %ld\n",REP, allIndex);
+    if (rank == 0) {
+        printf("Repeticoes Desejadas: %ld | Feitas: %ld \n", REP, allFib);
     }
 
     MPI_Finalize();
